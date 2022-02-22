@@ -33,8 +33,8 @@ public class KakaoController {
 //			
 //	}
 	
-	@GetMapping("/search")
-	public String search(@RequestParam String query) {
+	@GetMapping("/address")
+	public String address(@RequestParam String query) {
 		Mono<String> mono = kakaoWebClient.get()
 			.uri(builder -> builder.path("/v2/local/search/address.json").queryParam("query", query).build())
 			.exchangeToMono(response -> {return response.bodyToMono(String.class);});
@@ -52,5 +52,34 @@ public class KakaoController {
 		return mono.block();
 			
 	}
+	
+	@GetMapping("/coord2address")
+	public String coord2address(@RequestParam String x, @RequestParam String y) {
+		Mono<String> mono = kakaoWebClient.get()
+			.uri(builder -> builder.path("/v2/local/geo/coord2address.json").queryParam("x", x).queryParam("y", y).build())
+			.exchangeToMono(response -> {return response.bodyToMono(String.class);});
+		
+		return mono.block();
+			
+	}
+	
+	@GetMapping("/transcoord")
+	public String transcoord(@RequestParam String x, @RequestParam String y) {
+		Mono<String> mono = kakaoWebClient.get()
+			.uri(builder -> builder.path("/v2/local/geo/transcoord.json").queryParam("x", x).queryParam("y", y).queryParam("input_coord", "WTM").queryParam("output_coord", "WGS84").build())
+			.exchangeToMono(response -> {return response.bodyToMono(String.class);});
+		
+		return mono.block();
+			
+	}
 
+	@GetMapping("/keyword")
+	public String keyword(@RequestParam String query) {
+		Mono<String> mono = kakaoWebClient.get()
+			.uri(builder -> builder.path("/v2/local/search/keyword.json").queryParam("query", query).build())
+			.exchangeToMono(response -> {return response.bodyToMono(String.class);});
+		
+		return mono.block();
+			
+	}
 }
